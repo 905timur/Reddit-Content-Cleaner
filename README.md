@@ -30,8 +30,8 @@ A Python script that helps you manage your Reddit content history by providing v
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/905timur/Reddit-Content-Cleaner-v2.git
-cd Reddit-Content-Cleaner-v2
+git clone https://github.com/905timur/Reddit-Content-Cleaner.git
+cd Reddit-Content-Cleaner
 ```
 
 2. Install required packages:
@@ -238,7 +238,11 @@ This project is licensed under the MIT License.
 
 ## Changelog
 
-### v2.0.0 (alpha)
+### Reddit Content Cleaner v1.0.0
+- Integrated post clean up
+- Added media backup
+
+### RedditCommentCleaner v2.0.0 (alpha)
 - Added configuration file support
 - Implemented dry run mode
 - Added subreddit-specific deletion
@@ -247,10 +251,10 @@ This project is licensed under the MIT License.
 - Added type hints and better error handling
 - Converted to class-based structure
 
-### v1.9.1
+### RedditCommentCleanerv1.9.1
 - Added randomized 6-8 second delay between deletions
 - API rate limit improvements
 
-### v1.9
+### RedditCommentCleanerv1.9
 - Moved credentials to external file
 - Updated datetime handling for timezone support
