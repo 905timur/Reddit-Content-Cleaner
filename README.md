@@ -45,7 +45,7 @@ pip install praw pytz
 
 1. Navigate to [Reddit Apps Preferences](https://www.reddit.com/prefs/apps).
 
-2. Click "Create application" at the bottom of the page.
+2. Click "Create application" at the bottom of the repository.
 
 3. Select "script".
 
