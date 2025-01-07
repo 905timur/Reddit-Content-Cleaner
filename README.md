@@ -41,19 +41,23 @@ pip install praw pytz
 
 ## Configuration
 
-### Reddit API Setup
+## **REDDIT CONFIGURATION**
 
-1. Go to Reddit's App Preferences page: https://www.reddit.com/prefs/apps/
-2. Click "Create application" at the bottom
-3. Select "script"
-4. Fill in the required information:
-   - Name: Your app name
-   - Description: Brief description
-   - About URL: This GitHub repository URL
-   - Redirect URI: This GitHub repository URL
-5. Click "create app"
-6. Note down your client ID and client secret
+1. Navigate to [Reddit Apps Preferences](https://www.reddit.com/prefs/apps).
 
+2. Click "Create application" at the bottom of the page.
+
+3. Select "script".
+
+4. Fill out the description, and both the URL and redirect URI fields (you can point both fields to this GitHub page).
+
+5. Click "create app".
+
+    ![image](https://user-images.githubusercontent.com/130249301/234336730-dbe61b3f-ffed-4f1f-ab35-b5fe1239d72c.png)
+
+6. Once your app is created, you will see your client ID and client secret. Both are highlighted below:
+
+    ![image](https://user-images.githubusercontent.com/130249301/234361938-e09c0f87-e6b8-4b6b-9916-593b4bbcf35d.png)
 ### Credentials Setup
 
 Create a file named `credentials.txt` in the script directory with the following format:
