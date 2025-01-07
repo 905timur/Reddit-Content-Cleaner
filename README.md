@@ -1,4 +1,4 @@
-# Reddit Content Cleaner Version 1.0.0
+# Reddit Content Cleaner v1.0.0
 A Python script that helps you manage your Reddit content history by providing various options to clean, edit, and delete posts and comments based on different criteria. The script includes features like age-based deletion, karma-based filtering, and keyword-based management.
 
 ## Features
