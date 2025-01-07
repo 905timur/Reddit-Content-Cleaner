@@ -255,10 +255,10 @@ This project is licensed under the MIT License.
 - Added type hints and better error handling
 - Converted to class-based structure
 
-### RedditCommentCleanerv1.9.1
+### RedditCommentCleaner v1.9.1
 - Added randomized 6-8 second delay between deletions
 - API rate limit improvements
 
-### RedditCommentCleanerv1.9
+### RedditCommentCleaner v1.9
 - Moved credentials to external file
 - Updated datetime handling for timezone support
