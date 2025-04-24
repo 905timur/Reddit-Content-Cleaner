@@ -243,6 +243,11 @@ This project is licensed under the MIT License.
 ## Changelog
 
 ### Reddit Content Cleaner v1.0.0
+#(Patch 042425)
+- Fixed all instances of content.sub to use the proper PRAW syntax
+- Made all references to self.reddit.user.me() consistent throughout the code
+
+### Reddit Content Cleaner v1.0.0
 - Integrated post clean up
 - Added media backup
 
