@@ -30,7 +30,7 @@ class RedditContentCleaner:
 
         # Initialize Reddit instance
         self.credentials = self._load_credentials(credentials_file)
-        self. = praw.(
+        self.reddit = praw.Reddit(
             client_id=self.credentials['client_id'],
             client_secret=self.credentials['client_secret'],
             username=self.credentials['username'],
@@ -80,7 +80,7 @@ class RedditContentCleaner:
                 f.write(f"Type: {content_type}\n")
                 f.write(f"Timestamp: {datetime.datetime.now(pytz.UTC)}\n")
                 f.write(f"Score: {content.score}\n")
-                f.write(f"Sub: {content.sub}\n")
+                f.write(f"Sub: {content.subreddit.display_name}\n")
                 if content_type == "post":
                     f.write(f"Title: {content.title}\n")
                     if hasattr(content, 'selftext'):
@@ -107,7 +107,7 @@ class RedditContentCleaner:
             self.logger.error(f"Error downloading media: {str(e)}")
 
     def should_exclude_content(self, content) -> bool:
-        if str(content.sub) in self.config['excluded_subs']:
+        if str(content.subreddit.display_name) in self.config['excluded_subs']:
             return True
 
         content_text = content.selftext if hasattr(content, 'selftext') else content.body
@@ -126,7 +126,7 @@ class RedditContentCleaner:
                     comment.delete()
                     delay = random.uniform(self.config['min_delay'], self.config['max_delay'])
                     time.sleep(delay)
-                self.logger.info(f"Processed comment in r/{comment.sub}")
+                self.logger.info(f"Processed comment in r/{comment.subreddit.display_name}")
             except Exception as e:
                 self.logger.error(f"Error processing comment: {str(e)}")
 
@@ -145,22 +145,22 @@ class RedditContentCleaner:
                         post.edit(self.config['replacement_text'])
 
                     post.delete()
-                    delay = random.uniform(self.config['min_delay'], self.config['max_delay'])  # Added delay here
+                    delay = random.uniform(self.config['min_delay'], self.config['max_delay'])
                     time.sleep(delay)
-                self.logger.info(f"Processed post in r/{post.sub}")
+                self.logger.info(f"Processed post in r/{post.subreddit.display_name}")
             except Exception as e:
                 self.logger.error(f"Error processing post: {str(e)}")
 
     # Existing comment methods...
     def remove_old_comments(self, days: int) -> None:
         cutoff = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=days)
-        for comment in self..user.me().comments.new(limit=None):
+        for comment in self.reddit.user.me().comments.new(limit=None):
             comment_time = datetime.datetime.fromtimestamp(comment.created_utc, pytz.UTC)
             if comment_time < cutoff:
                 self.process_comment(comment)
 
     def remove_negative_karma(self) -> None:
-        for comment in self..user.me().comments.new(limit=None):
+        for comment in self.reddit.user.me().comments.new(limit=None):
             if comment.score < 0:
                 self.process_comment(comment)
 
@@ -189,10 +189,10 @@ class RedditContentCleaner:
     # Existing methods for subreddit and keyword...
     def remove_by_subreddit(self, subreddit_name: str) -> None:
         for comment in self.reddit.user.me().comments.new(limit=None):
-            if str(comment.subreddit).lower() == subreddit_name.lower():
+            if str(comment.subreddit.display_name).lower() == subreddit_name.lower():
                 self.process_comment(comment)
         for post in self.reddit.user.me().submissions.new(limit=None):
-            if str(post.subreddit).lower() == subreddit_name.lower():
+            if str(post.subreddit.display_name).lower() == subreddit_name.lower():
                 self.process_post(post)
 
     def remove_by_keyword(self, keyword: str) -> None:
