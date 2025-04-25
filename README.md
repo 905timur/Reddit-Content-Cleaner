@@ -1,7 +1,7 @@
 ![Reddti Content Cleaner](rcc.svg)
 
 
-# Reddit Content Cleaner v1.0.0
+# Reddit Content Cleaner v1.1.0
 A Python script that helps you manage your Reddit content history by providing various options to clean, edit, and delete posts and comments based on different criteria. The script includes features like age-based deletion, karma-based filtering, and keyword-based management.
 
 ## Features
@@ -28,6 +28,7 @@ A Python script that helps you manage your Reddit content history by providing v
 - Python 3.6 or higher
 - PRAW (Python Reddit API Wrapper)
 - pytz library for timezone handling
+- tqdm library to support real-time progress during content removal operations
 
 ## Installation
 
@@ -39,7 +40,7 @@ cd Reddit-Content-Cleaner
 
 2. Install required packages:
 ```bash
-pip install praw pytz
+pip install praw pytz tqdm
 ```
 
 ## Configuration
@@ -244,6 +245,17 @@ Contributions are welcome! Please:
 This project is licensed under the MIT License.
 
 ## Changelog
+
+### Reddit Content Cleaner v1.1.0
+- Added progress bars using the tqdm library to show real-time progress during content removal operations
+- Added counters to show the total number of items processed and removed
+- Enhanced the user interface with clearer formatting and emojis
+- Added item counts at the beginning of operations to give users an estimate of how many items will be processed
+- Added a confirmation prompt when removing all posts to prevent accidental deletions
+- Added automatic detection and installation prompt for the tqdm library if it's not installed
+- Improved the config saving when toggling dry run mode
+- Added better summary statistics after operations complete
+- Updated version number to reflect the enhancements
 
 ### Reddit Content Cleaner v1.0.0 (Patch 042425)
 - Fixed all instances of content.sub to use the proper PRAW syntax
