@@ -4,12 +4,13 @@ import pytz
 import random
 import time
 import logging
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Iterator
 import json
 import re
 import os
 import requests
 from urllib.parse import urlparse
+from tqdm import tqdm
 
 class RedditContentCleaner:
     def __init__(self, credentials_file: str = "credentials.txt"):
@@ -35,7 +36,7 @@ class RedditContentCleaner:
             client_secret=self.credentials['client_secret'],
             username=self.credentials['username'],
             password=self.credentials['password'],
-            user_agent="Content Cleaner v3.0"
+            user_agent="Content Cleaner v1.1.0"
         )
 
         # Load configuration
@@ -117,7 +118,30 @@ class RedditContentCleaner:
 
         return False
 
-    def process_comment(self, comment) -> None:
+    def _count_items(self, iterator: Iterator) -> int:
+        """Count the total number of items in an iterator (consumes the iterator)"""
+        count = 0
+        for _ in iterator:
+            count += 1
+        return count
+
+    def _get_comment_count(self) -> int:
+        """Get an approximate count of user's comments"""
+        try:
+            return self._count_items(self.reddit.user.me().comments.new(limit=None))
+        except Exception as e:
+            self.logger.error(f"Error counting comments: {str(e)}")
+            return 0
+
+    def _get_post_count(self) -> int:
+        """Get an approximate count of user's posts"""
+        try:
+            return self._count_items(self.reddit.user.me().submissions.new(limit=None))
+        except Exception as e:
+            self.logger.error(f"Error counting posts: {str(e)}")
+            return 0
+
+    def process_comment(self, comment, progress_bar=None) -> None:
         if not self.should_exclude_content(comment):
             try:
                 self.backup_content(comment, "comment")
@@ -127,10 +151,14 @@ class RedditContentCleaner:
                     delay = random.uniform(self.config['min_delay'], self.config['max_delay'])
                     time.sleep(delay)
                 self.logger.info(f"Processed comment in r/{comment.subreddit.display_name}")
+                if progress_bar:
+                    progress_bar.update(1)
             except Exception as e:
                 self.logger.error(f"Error processing comment: {str(e)}")
+                if progress_bar:
+                    progress_bar.update(1)
 
-    def process_post(self, post) -> None:
+    def process_post(self, post, progress_bar=None) -> None:
         if not self.should_exclude_content(post):
             try:
                 self.backup_content(post, "post")
@@ -148,82 +176,235 @@ class RedditContentCleaner:
                     delay = random.uniform(self.config['min_delay'], self.config['max_delay'])
                     time.sleep(delay)
                 self.logger.info(f"Processed post in r/{post.subreddit.display_name}")
+                if progress_bar:
+                    progress_bar.update(1)
             except Exception as e:
                 self.logger.error(f"Error processing post: {str(e)}")
+                if progress_bar:
+                    progress_bar.update(1)
 
-    # Existing comment methods...
     def remove_old_comments(self, days: int) -> None:
         cutoff = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=days)
-        for comment in self.reddit.user.me().comments.new(limit=None):
-            comment_time = datetime.datetime.fromtimestamp(comment.created_utc, pytz.UTC)
-            if comment_time < cutoff:
-                self.process_comment(comment)
+
+        # First count approximately how many comments we'll process
+        print("Estimating comment count...")
+        total_comments = self._get_comment_count()
+        processed = 0
+
+        print(f"Processing approximately {total_comments} comments...")
+        with tqdm(total=total_comments, desc="Removing old comments", unit="comment") as pbar:
+            for comment in self.reddit.user.me().comments.new(limit=None):
+                comment_time = datetime.datetime.fromtimestamp(comment.created_utc, pytz.UTC)
+                if comment_time < cutoff:
+                    self.process_comment(comment, pbar)
+                else:
+                    pbar.update(1)
+                processed += 1
+
+        print(f"Completed! Processed {processed} comments.")
 
     def remove_negative_karma(self) -> None:
-        for comment in self.reddit.user.me().comments.new(limit=None):
-            if comment.score < 0:
-                self.process_comment(comment)
+        # First count approximately how many comments we'll process
+        print("Estimating comment count...")
+        total_comments = self._get_comment_count()
+        processed = 0
+        removed = 0
+
+        print(f"Processing approximately {total_comments} comments...")
+        with tqdm(total=total_comments, desc="Removing negative karma comments", unit="comment") as pbar:
+            for comment in self.reddit.user.me().comments.new(limit=None):
+                if comment.score < 0:
+                    self.process_comment(comment, pbar)
+                    removed += 1
+                else:
+                    pbar.update(1)
+                processed += 1
+
+        print(f"Completed! Processed {processed} comments, removed {removed} comments.")
 
     def remove_low_engagement(self) -> None:
-        for comment in self.reddit.user.me().comments.new(limit=None):
-            if comment.score <= 1 and len(comment.replies) == 0:
-                self.process_comment(comment)
+        # First count approximately how many comments we'll process
+        print("Estimating comment count...")
+        total_comments = self._get_comment_count()
+        processed = 0
+        removed = 0
 
-    # New post methods
+        print(f"Processing approximately {total_comments} comments...")
+        with tqdm(total=total_comments, desc="Removing low engagement comments", unit="comment") as pbar:
+            for comment in self.reddit.user.me().comments.new(limit=None):
+                if comment.score <= 1 and len(comment.replies) == 0:
+                    self.process_comment(comment, pbar)
+                    removed += 1
+                else:
+                    pbar.update(1)
+                processed += 1
+
+        print(f"Completed! Processed {processed} comments, removed {removed} comments.")
+
     def remove_all_posts(self) -> None:
-        for post in self.reddit.user.me().submissions.new(limit=None):
-            self.process_post(post)
+        # First count approximately how many posts we'll process
+        print("Estimating post count...")
+        total_posts = self._get_post_count()
+        processed = 0
+
+        print(f"Processing approximately {total_posts} posts...")
+        with tqdm(total=total_posts, desc="Removing all posts", unit="post") as pbar:
+            for post in self.reddit.user.me().submissions.new(limit=None):
+                self.process_post(post, pbar)
+                processed += 1
+
+        print(f"Completed! Removed {processed} posts.")
 
     def remove_old_posts(self, days: int) -> None:
         cutoff = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=days)
-        for post in self.reddit.user.me().submissions.new(limit=None):
-            post_time = datetime.datetime.fromtimestamp(post.created_utc, pytz.UTC)
-            if post_time < cutoff:
-                self.process_post(post)
+
+        # First count approximately how many posts we'll process
+        print("Estimating post count...")
+        total_posts = self._get_post_count()
+        processed = 0
+        removed = 0
+
+        print(f"Processing approximately {total_posts} posts...")
+        with tqdm(total=total_posts, desc="Removing old posts", unit="post") as pbar:
+            for post in self.reddit.user.me().submissions.new(limit=None):
+                post_time = datetime.datetime.fromtimestamp(post.created_utc, pytz.UTC)
+                if post_time < cutoff:
+                    self.process_post(post, pbar)
+                    removed += 1
+                else:
+                    pbar.update(1)
+                processed += 1
+
+        print(f"Completed! Processed {processed} posts, removed {removed} posts.")
 
     def remove_low_karma_posts(self, threshold: int) -> None:
-        for post in self.reddit.user.me().submissions.new(limit=None):
-            if post.score < threshold:
-                self.process_post(post)
+        # First count approximately how many posts we'll process
+        print("Estimating post count...")
+        total_posts = self._get_post_count()
+        processed = 0
+        removed = 0
 
-    # Existing methods for subreddit and keyword...
+        print(f"Processing approximately {total_posts} posts...")
+        with tqdm(total=total_posts, desc="Removing low karma posts", unit="post") as pbar:
+            for post in self.reddit.user.me().submissions.new(limit=None):
+                if post.score < threshold:
+                    self.process_post(post, pbar)
+                    removed += 1
+                else:
+                    pbar.update(1)
+                processed += 1
+
+        print(f"Completed! Processed {processed} posts, removed {removed} posts.")
+
     def remove_by_subreddit(self, subreddit_name: str) -> None:
-        for comment in self.reddit.user.me().comments.new(limit=None):
-            if str(comment.subreddit.display_name).lower() == subreddit_name.lower():
-                self.process_comment(comment)
-        for post in self.reddit.user.me().submissions.new(limit=None):
-            if str(post.subreddit.display_name).lower() == subreddit_name.lower():
-                self.process_post(post)
+        # First count approximately how many items we'll process
+        print("Estimating content count...")
+        total_comments = self._get_comment_count()
+        total_posts = self._get_post_count()
+        total_items = total_comments + total_posts
+        processed_comments = 0
+        processed_posts = 0
+        removed_comments = 0
+        removed_posts = 0
+
+        print(f"Processing approximately {total_items} items...")
+        with tqdm(total=total_items, desc=f"Removing content from r/{subreddit_name}", unit="item") as pbar:
+            # Process comments first
+            for comment in self.reddit.user.me().comments.new(limit=None):
+                if str(comment.subreddit.display_name).lower() == subreddit_name.lower():
+                    self.process_comment(comment, pbar)
+                    removed_comments += 1
+                else:
+                    pbar.update(1)
+                processed_comments += 1
+
+            # Then process posts
+            for post in self.reddit.user.me().submissions.new(limit=None):
+                if str(post.subreddit.display_name).lower() == subreddit_name.lower():
+                    self.process_post(post, pbar)
+                    removed_posts += 1
+                else:
+                    pbar.update(1)
+                processed_posts += 1
+
+        print(f"Completed! Processed {processed_comments} comments and {processed_posts} posts.")
+        print(f"Removed {removed_comments} comments and {removed_posts} posts from r/{subreddit_name}.")
 
     def remove_by_keyword(self, keyword: str) -> None:
-        for comment in self.reddit.user.me().comments.new(limit=None):
-            if keyword.lower() in comment.body.lower():
-                self.process_comment(comment)
-        for post in self.reddit.user.me().submissions.new(limit=None):
-            if keyword.lower() in post.title.lower() or (hasattr(post, 'selftext') and keyword.lower() in post.selftext.lower()):
-                self.process_post(post)
+        # First count approximately how many items we'll process
+        print("Estimating content count...")
+        total_comments = self._get_comment_count()
+        total_posts = self._get_post_count()
+        total_items = total_comments + total_posts
+        processed_comments = 0
+        processed_posts = 0
+        removed_comments = 0
+        removed_posts = 0
+
+        print(f"Processing approximately {total_items} items...")
+        with tqdm(total=total_items, desc=f"Removing content with keyword '{keyword}'", unit="item") as pbar:
+            # Process comments first
+            for comment in self.reddit.user.me().comments.new(limit=None):
+                if keyword.lower() in comment.body.lower():
+                    self.process_comment(comment, pbar)
+                    removed_comments += 1
+                else:
+                    pbar.update(1)
+                processed_comments += 1
+
+            # Then process posts
+            for post in self.reddit.user.me().submissions.new(limit=None):
+                if keyword.lower() in post.title.lower() or (hasattr(post, 'selftext') and keyword.lower() in post.selftext.lower()):
+                    self.process_post(post, pbar)
+                    removed_posts += 1
+                else:
+                    pbar.update(1)
+                processed_posts += 1
+
+        print(f"Completed! Processed {processed_comments} comments and {processed_posts} posts.")
+        print(f"Removed {removed_comments} comments and {removed_posts} posts containing '{keyword}'.")
 
 def main():
     cleaner = RedditContentCleaner()
 
-    while True:
-        print("\nReddit Content Cleaner v1.0.0")
-        print("\nComment Options:")
-        print("1. Remove comments older than x days")
-        print("2. Remove comments with negative karma")
-        print("3. Remove comments with 1 karma and no replies")
-        print("\nPost Options:")
-        print("4. Remove all posts")
-        print("5. Remove posts older than x days")
-        print("6. Remove posts under x upvotes")
-        print("\nGeneral Options:")
-        print("7. Remove content from specific subreddit")
-        print("8. Remove content containing keyword")
-        print("9. Edit configuration")
-        print("10. Enable/Disable dry run")
-        print("11. Quit")
+    # Check if tqdm is installed, if not provide installation instructions
+    try:
+        import tqdm
+    except ImportError:
+        print("The 'tqdm' package is required for progress bars.")
+        print("Please install it using: pip install tqdm")
+        install = input("Would you like to install it now? (y/n): ")
+        if install.lower() == 'y':
+            import subprocess
+            subprocess.check_call(["pip", "install", "tqdm"])
+            print("tqdm installed successfully!")
+        else:
+            print("Please install tqdm manually and restart the program.")
+            return
 
-        choice = input("\nEnter your choice (1-11): ")
+    while True:
+        print("\n" + "=" * 50)
+        print("     Reddit Content Cleaner v1.1.0")
+        print("=" * 50)
+
+        print("\n📜 Comment Options:")
+        print("  1. Remove comments older than x days")
+        print("  2. Remove comments with negative karma")
+        print("  3. Remove comments with 1 karma and no replies")
+
+        print("\n📝 Post Options:")
+        print("  4. Remove all posts")
+        print("  5. Remove posts older than x days")
+        print("  6. Remove posts under x upvotes")
+
+        print("\n⚙️ General Options:")
+        print("  7. Remove content from specific subreddit")
+        print("  8. Remove content containing keyword")
+        print("  9. Edit configuration")
+        print(" 10. Enable/Disable dry run")
+        print(" 11. Quit")
+
+        choice = input("\n👉 Enter your choice (1-11): ")
 
         try:
             if choice == "1":
@@ -234,7 +415,11 @@ def main():
             elif choice == "3":
                 cleaner.remove_low_engagement()
             elif choice == "4":
-                cleaner.remove_all_posts()
+                confirm = input("Are you sure you want to remove ALL posts? (y/n): ")
+                if confirm.lower() == 'y':
+                    cleaner.remove_all_posts()
+                else:
+                    print("Operation cancelled.")
             elif choice == "5":
                 days = int(input("Enter number of days: "))
                 cleaner.remove_old_posts(days)
@@ -251,11 +436,19 @@ def main():
                 print("\nCurrent configuration:")
                 print(json.dumps(cleaner.config, indent=4))
                 print("\nEdit config.json file to make changes")
+                input("Press Enter to continue...")
             elif choice == "10":
                 cleaner.config['dry_run'] = not cleaner.config['dry_run']
-                print(f"Dry run {'enabled' if cleaner.config['dry_run'] else 'disabled'}")
+                status = "ENABLED" if cleaner.config['dry_run'] else "DISABLED"
+                print(f"Dry run {status}")
+                # Save the updated config
+                with open('config.json', 'w') as f:
+                    json.dump(cleaner.config, f, indent=4)
             elif choice == "11":
+                print("Thank you for using Reddit Content Cleaner!")
                 break
+            else:
+                print("Invalid choice. Please enter a number between 1 and 11.")
         except ValueError as e:
             print(f"Invalid input: {str(e)}")
         except Exception as e:
