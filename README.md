@@ -25,7 +25,7 @@ A Python script that helps you manage your Reddit content history by providing v
 
 ## System Requirements
 
-- Python 3.6 or higher
+- [![Python](https://img.shields.io/badge/Python-3.6+-blue.svg)](https://www.python.org/downloads/) Python 3.6 or higher
 - PRAW (Python Reddit API Wrapper)
 - pytz library for timezone handling
 - tqdm library to support real-time progress during content removal operations
