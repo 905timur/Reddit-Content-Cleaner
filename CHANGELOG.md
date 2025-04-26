@@ -16,6 +16,7 @@
 - Made all references to self.reddit.user.me() consistent throughout the code
 
 ### Reddit Content Cleaner v1.0.0
+- All future releases will be now published as "Reddit Content Cleaner" not "RedditCommentCleaner"
 - Integrated post clean up
 - Added media backup
 
