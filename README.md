@@ -87,7 +87,8 @@ The script uses a `config.json` file for customization. It will be automatically
     "excluded_subreddits": ["AskScience", "PersonalFinance", "LegalAdvice", "programming"],
     "excluded_keywords": ["important", "keep this", "legal document", "confidential"],
     "backup_enabled": true,
-    "dry_run": false
+    "dry_run": false,
+    "banned_mode": false
 }
 ```
 
