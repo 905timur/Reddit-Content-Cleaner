@@ -48,7 +48,7 @@ pip install praw pytz tqdm
 
 ## Configuration
 
-## **REDDIT CONFIGURATION**
+### **Reddit Configuration**
 
 1. Navigate to [Reddit Apps Preferences](https://www.reddit.com/prefs/apps).
 
@@ -65,6 +65,7 @@ pip install praw pytz tqdm
 6. Once your app is created, you will see your client ID and client secret. Both are highlighted below:
 
     ![image](https://user-images.githubusercontent.com/130249301/234361938-e09c0f87-e6b8-4b6b-9916-593b4bbcf35d.png)
+
 ### Credentials Setup
 
 Create a file named `credentials.txt` in the script directory with the following format:
