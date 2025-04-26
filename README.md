@@ -149,9 +149,9 @@ python RedditContentCleaner.py
    - Useful for verifying settings before running cleanup
 
 11. **Enable/Disable banned mode**
-    - When banned mode is enabled, the script will skip the edit step and proceed directly to deletion, which will prevent errors when working with a banned account. 
+   - When banned mode is enabled, the script will skip the edit step and proceed directly to deletion, which will prevent errors when working with a banned account. 
 
-12. **Quit**
+13. **Quit**
    - Safely exit the program
 
 ## Backup System
