@@ -1,20 +1,8 @@
 ![Reddti Content Cleaner](rcc.svg)
 
-
 # Reddit Content Cleaner v1.1.0
+
 A Python script that helps you manage your Reddit content history by providing various options to clean, edit, and delete posts and comments based on different criteria. The script includes features like age-based deletion, karma-based filtering, and keyword-based management.
-
-## Star History
-
-<p align="center">
-  <a href="https://www.star-history.com/#905timur/Reddit-Content-Cleaner&Date">
-   <picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=905timur/Reddit-Content-Cleaner&type=Date&theme=dark" />
-     <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=905timur/Reddit-Content-Cleaner&type=Date" />
-     <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=905timur/Reddit-Content-Cleaner&type=Date" />
-   </picture>
-  </a>
-</p>
 
 ## Features
 
@@ -257,6 +245,18 @@ Contributions are welcome! Please:
 This project is licensed under the MIT License.
 
 [![ License.](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Star History
+
+<p align="center">
+  <a href="https://www.star-history.com/#905timur/Reddit-Content-Cleaner&Date">
+   <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=905timur/Reddit-Content-Cleaner&type=Date&theme=dark" />
+     <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=905timur/Reddit-Content-Cleaner&type=Date" />
+     <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=905timur/Reddit-Content-Cleaner&type=Date" />
+   </picture>
+  </a>
+</p>
 
 ## Changelog
 
