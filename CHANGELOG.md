@@ -31,3 +31,7 @@
 ### RedditCommentCleaner v1.9.1
 - Added randomized 6-8 second delay between deletions
 - API rate limit improvements
+
+### RedditCommentCleaner v1.9
+- Moved credentials to external file
+- Updated datetime handling for timezone support
