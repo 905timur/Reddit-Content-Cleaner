@@ -259,9 +259,3 @@ This project is licensed under the MIT License.
    </picture>
   </a>
 </p>
-
-
-
-### RedditCommentCleaner v1.9
-- Moved credentials to external file
-- Updated datetime handling for timezone support
