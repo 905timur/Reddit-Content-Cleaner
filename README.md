@@ -52,7 +52,7 @@ pip install praw pytz tqdm
 
 1. Navigate to [Reddit Apps Preferences](https://www.reddit.com/prefs/apps).
 
-2. Click "Create application" at the bottom of the repository.
+2. Click "Create application".
 
 3. Select "script".
 
