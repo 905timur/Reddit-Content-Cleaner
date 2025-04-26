@@ -27,7 +27,7 @@ A Python script that helps you manage your Reddit content history by providing v
 
 - [![Python](https://img.shields.io/badge/Python-3.6+-blue.svg)](https://www.python.org/downloads/) Python 3.6 or higher
 - [![PRAW](https://img.shields.io/badge/PRAW-7.0+-green.svg)](https://praw.readthedocs.io/en/stable/) PRAW (Python Reddit API Wrapper)
-- [![tqdm](https://img.shields.io/badge/tqdm-4.0+-orange.svg)](https://tqdm.github.io/) tqdm library to support real-time progress during content removal operations
+- [![tqdm](https://img.shields.io/badge/tqdm-4.0+-orange.svg)](https://tqdm.github.io/) tqdm library to support real-time progress visualization during content removal operations
 -  pytz library for timezone handling
 
 ## Installation
