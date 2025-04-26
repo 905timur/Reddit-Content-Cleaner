@@ -1,5 +1,15 @@
 ## Changelog
 
+### Reddit Content Cleaner v1.1.1
+- Added a 'banned_mode' option to the default configuration (set to False initially)
+- Modified the process_comment and process_post methods to check for banned_mode before attempting to edit content
+- Added a new menu option (#11) to toggle banned mode on/off
+- Updated all version references from 1.1.0 to 1.1.1
+- Added logging to indicate when banned mode is active during processing
+- Updated the menu option numbering (Quit is now option 12)
+
+When banned mode is enabled, the script will skip the edit step and proceed directly to deletion, which should prevent errors when working with a banned account. The user will see clear feedback about the current banned mode status when they toggle it.
+
 ### Reddit Content Cleaner v1.1.0
 - Added progress bars using the tqdm library to show real-time progress during content removal operations
 - Added counters to show the total number of items processed and removed
