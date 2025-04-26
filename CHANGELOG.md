@@ -1,4 +1,4 @@
-## Changelog
+## Change Log
 
 ### Reddit Content Cleaner v1.1.1
 - Added a 'banned_mode' option to the default configuration (set to False initially)
