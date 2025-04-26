@@ -110,49 +110,49 @@ python RedditContentCleaner.py
 ### Available Options
 
 1. **Remove content older than x days**
-   - Deletes all posts and comments older than the specified number of days
-   - Prompts for the number of days
-   - Respects excluded subreddits and keywords
+    - Deletes all posts and comments older than the specified number of days
+    - Prompts for the number of days
+    - Respects excluded subreddits and keywords
 
 2. **Remove comments with negative karma**
-   - Automatically finds and removes all comments with negative karma scores
-   - Useful for cleaning up controversial or downvoted comments
+    - Automatically finds and removes all comments with negative karma scores
+    - Useful for cleaning up controversial or downvoted comments
 
 3. **Remove comments with 1 karma and no replies**
-   - Cleans up comments that haven't received any engagement
-   - Helps remove "orphaned" comments from your history
+    - Cleans up comments that haven't received any engagement
+    - Helps remove "orphaned" comments from your history
 
 4. **Remove all posts**
-   - Deletes all posts from your Reddit history
+    - Deletes all posts from your Reddit history
 
 5. **Remove posts older than x days**
-   - Deletes posts older than the specified number of days
+    - Deletes posts older than the specified number of days
 
 6. **Remove posts under x upvotes**
-   - Deletes posts with a score below the specified threshold
-
+    - Deletes posts with a score below the specified threshold
+     
 7. **Remove content from specific subreddit**
-   - Target a specific subreddit for content cleanup
-   - Useful for removing history from particular communities
+    - Target a specific subreddit for content cleanup
+    - Useful for removing history from particular communities
 
 8. **Remove content containing keyword**
-   - Search and remove posts or comments containing specific words or phrases
-   - Case-insensitive matching
+    - Search and remove posts or comments containing specific words or phrases
+    - Case-insensitive matching
 
 9. **Edit configuration**
-   - View current configuration settings
-   - Provides instructions for modifying the config.json file
+    - View current configuration settings
+    - Provides instructions for modifying the config.json file
 
 10. **Enable/Disable dry run**
-   - Toggle test mode on/off
-   - Shows what would be deleted without actually deleting
-   - Useful for verifying settings before running cleanup
+    - Toggle test mode on/off
+    - Shows what would be deleted without actually deleting
+    - Useful for verifying settings before running cleanup
 
 11. **Enable/Disable banned mode**
-   - When banned mode is enabled, the script will skip the edit step and proceed directly to deletion, which will prevent errors when working with a banned account. 
+    - When banned mode is enabled, the script will skip the edit step and proceed directly to deletion, which will prevent errors when working with a banned account. 
 
 13. **Quit**
-   - Safely exit the program
+    - Safely exit the program
 
 ## Backup System
 
