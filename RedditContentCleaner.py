@@ -36,7 +36,7 @@ class RedditContentCleaner:
             client_secret=self.credentials['client_secret'],
             username=self.credentials['username'],
             password=self.credentials['password'],
-            user_agent="Content Cleaner v1.1.0"
+            user_agent="Content Cleaner v1.1.1"
         )
 
         # Load configuration
@@ -69,7 +69,8 @@ class RedditContentCleaner:
                 'excluded_subs': [],
                 'excluded_keywords': [],
                 'backup_enabled': True,
-                'dry_run': False
+                'dry_run': False,
+                'banned_mode': False
             }
             with open('config.json', 'w') as f:
                 json.dump(config, f, indent=4)
@@ -146,11 +147,14 @@ class RedditContentCleaner:
             try:
                 self.backup_content(comment, "comment")
                 if not self.config['dry_run']:
-                    comment.edit(self.config['replacement_text'])
+                    # Only edit comments if not in banned mode
+                    if not self.config['banned_mode']:
+                        comment.edit(self.config['replacement_text'])
                     comment.delete()
                     delay = random.uniform(self.config['min_delay'], self.config['max_delay'])
                     time.sleep(delay)
-                self.logger.info(f"Processed comment in r/{comment.subreddit.display_name}")
+                mode_str = " (banned mode)" if self.config['banned_mode'] else ""
+                self.logger.info(f"Processed comment in r/{comment.subreddit.display_name}{mode_str}")
                 if progress_bar:
                     progress_bar.update(1)
             except Exception as e:
@@ -168,14 +172,15 @@ class RedditContentCleaner:
                     self.download_media(post)
 
                 if not self.config['dry_run']:
-                    # Edit if it's a text post
-                    if hasattr(post, 'selftext') and post.selftext:
+                    # Edit if it's a text post and not in banned mode
+                    if not self.config['banned_mode'] and hasattr(post, 'selftext') and post.selftext:
                         post.edit(self.config['replacement_text'])
 
                     post.delete()
                     delay = random.uniform(self.config['min_delay'], self.config['max_delay'])
                     time.sleep(delay)
-                self.logger.info(f"Processed post in r/{post.subreddit.display_name}")
+                mode_str = " (banned mode)" if self.config['banned_mode'] else ""
+                self.logger.info(f"Processed post in r/{post.subreddit.display_name}{mode_str}")
                 if progress_bar:
                     progress_bar.update(1)
             except Exception as e:
@@ -384,7 +389,7 @@ def main():
 
     while True:
         print("\n" + "=" * 50)
-        print("     Reddit Content Cleaner v1.1.0")
+        print("     Reddit Content Cleaner v1.1.1")
         print("=" * 50)
 
         print("\n📜 Comment Options:")
@@ -402,9 +407,10 @@ def main():
         print("  8. Remove content containing keyword")
         print("  9. Edit configuration")
         print(" 10. Enable/Disable dry run")
-        print(" 11. Quit")
+        print(" 11. Toggle banned mode")
+        print(" 12. Quit")
 
-        choice = input("\n👉 Enter your choice (1-11): ")
+        choice = input("\n👉 Enter your choice (1-12): ")
 
         try:
             if choice == "1":
@@ -445,10 +451,19 @@ def main():
                 with open('config.json', 'w') as f:
                     json.dump(cleaner.config, f, indent=4)
             elif choice == "11":
+                cleaner.config['banned_mode'] = not cleaner.config['banned_mode']
+                status = "ENABLED" if cleaner.config['banned_mode'] else "DISABLED"
+                print(f"Banned mode {status}")
+                if cleaner.config['banned_mode']:
+                    print("Comments and posts will be deleted without editing first")
+                # Save the updated config
+                with open('config.json', 'w') as f:
+                    json.dump(cleaner.config, f, indent=4)
+            elif choice == "12":
                 print("Thank you for using Reddit Content Cleaner!")
                 break
             else:
-                print("Invalid choice. Please enter a number between 1 and 11.")
+                print("Invalid choice. Please enter a number between 1 and 12.")
         except ValueError as e:
             print(f"Invalid input: {str(e)}")
         except Exception as e:
