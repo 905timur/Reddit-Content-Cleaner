@@ -1,8 +1,8 @@
 ![Reddti Content Cleaner](rcc.svg)
 
-# Reddit Content Cleaner v1.1.1
-
 A Python script that helps you manage your Reddit content history by providing various options to clean, edit, and delete posts and comments based on different criteria. The script includes features like age-based deletion, karma-based filtering, and keyword-based management.
+
+[![Version](https://img.shields.io/badge/version-1.1.1-blue)](https://github.com/905timur/Reddit-Content-Cleaner/blob/main/CHANGELOG.md)
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-Actively-green)](https://GitHub.com/yourusername/yourrepository/commits/main)
 
