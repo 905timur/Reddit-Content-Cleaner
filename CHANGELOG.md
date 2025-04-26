@@ -8,7 +8,7 @@
 - Added logging to indicate when banned mode is active during processing
 - Updated the menu option numbering (Quit is now option 12)
 
-When banned mode is enabled, the script will skip the edit step and proceed directly to deletion, which should prevent errors when working with a banned account. The user will see clear feedback about the current banned mode status when they toggle it.
+When banned mode is enabled, the script will skip the edit step and proceed directly to deletion, which will prevent errors when working with a banned account.
 
 ### Reddit Content Cleaner v1.1.0
 - Added progress bars using the tqdm library to show real-time progress during content removal operations
