@@ -15,7 +15,7 @@ A Python script that helps you manage your Reddit content history by providing v
 - Target specific subreddits for content cleanup
 - Remove content containing specific keywords
 - Dry run mode for testing changes before execution
-- Banned mode (when enabled the script will not attempt to replace comment text and instead will simply delete the comment)
+- Banned mode (when enabled the script will not attempt to replace comment text and instead will simply delete the post or comment)
 - Configurable comment replacement text
 - Detailed logging and backup system
 
