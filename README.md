@@ -8,7 +8,7 @@ A Python script that helps you manage your Reddit content history by providing v
 
 ## Features
 
-### Note for users with two-factor authentication enabled on their $eddit account. 
+### Note for users with two-factor authentication enabled on their Reddit account. 
 
 This script will not work on accounts that utilize 2FA.
 
