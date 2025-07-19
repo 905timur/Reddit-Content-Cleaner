@@ -8,6 +8,10 @@ A Python script that helps you manage your Reddit content history by providing v
 
 ## Features
 
+### Note for users with two-factor authentication enabled on their reddit account. 
+
+This script will not work on accounts that utilize 2FA.
+
 ### Core Functionality
 - Delete posts and comments older than a specified number of days
 - Remove comments with negative karma
@@ -85,7 +89,7 @@ The script uses a `config.json` file for customization. It will be automatically
     "replacement_text": ".",
     "min_delay": 6, 
     "max_delay": 8, 
-    "excluded_subreddits": ["AskScience", "PersonalFinance", "LegalAdvice", "programming"],
+    "excluded_subs": ["AskScience", "PersonalFinance", "LegalAdvice", "programming"],
     "excluded_keywords": ["important", "keep this", "legal document", "confidential"],
     "backup_enabled": true,
     "dry_run": false,
@@ -97,7 +101,7 @@ Configuration options:
 - `replacement_text`: Text to replace comments with before deletion
 - `min_delay`: Minimum delay between operations in seconds
 - `max_delay`: Maximum delay between operations in seconds
-- `excluded_subreddits`: List of subreddits to exclude from deletion
+- `excluded_subs`: List of subreddits to exclude from deletion
 - `excluded_keywords`: List of keywords that will prevent content deletion
 - `backup_enabled`: Enable/disable content backups
 - `dry_run`: Test mode that shows what would be deleted without actually deleting
