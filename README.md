@@ -12,8 +12,6 @@ An open-source Python script that helps you manage your Reddit content history b
 
 Due to recent changes in Reddit's API access policies, new app creation requires approval under the Responsible Builder Policy. However, if you have legacy Reddit apps created before these policy changes under your account, you can use the existing app ID and secret from those legacy apps to run this script without needing new app approval. This script will not work on accounts that utilize 2FA.
 
-Due to 
-
 ### Core Functionality
 - Delete posts and comments older than a specified number of days
 - Remove comments with negative karma
