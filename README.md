@@ -1,6 +1,6 @@
 ![Reddti Content Cleaner](rcc.svg)
 
-A Python script that helps you manage your Reddit content history by providing various options to clean, edit, and delete posts and comments based on different criteria. The script includes features like age-based deletion, karma-based filtering, and keyword-based management.
+An open-source Python script that helps you manage your Reddit content history by providing various options to clean, edit, and delete posts and comments based on different criteria. The script includes features like age-based deletion, karma-based filtering, and keyword-based management.
 
 [![Version](https://img.shields.io/badge/version-1.1.1-blue)](https://github.com/905timur/Reddit-Content-Cleaner/blob/main/CHANGELOG.md)
 
@@ -8,9 +8,11 @@ A Python script that helps you manage your Reddit content history by providing v
 
 ## Features
 
-### Note for users with two-factor authentication enabled on their Reddit account. 
+### IMPORTANT - READ THIS FIRST!
 
-This script will not work on accounts that utilize 2FA.
+Due to recent changes in Reddit's API access policies, new app creation requires approval under the Responsible Builder Policy. However, if you have legacy Reddit apps created before these policy changes under your account, you can use the existing app ID and secret from those legacy apps to run this script without needing new app approval. This script will not work on accounts that utilize 2FA.
+
+Due to 
 
 ### Core Functionality
 - Delete posts and comments older than a specified number of days
