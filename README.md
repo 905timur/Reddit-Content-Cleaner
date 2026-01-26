@@ -8,6 +8,7 @@ An open-source Python script that helps you manage your Reddit content history b
 
 ## Features
 
+========≠====================================
 ### IMPORTANT - READ THIS FIRST!
 
 Due to recent changes in Reddit's API access policies, new app creation requires approval under the Responsible Builder Policy. However, if you have legacy Reddit apps created before these policy changes under your account, you can use the existing app ID and secret from those legacy apps to run this script without needing new app approval. This script will not work on accounts that utilize 2FA.
@@ -15,6 +16,7 @@ Due to recent changes in Reddit's API access policies, new app creation requires
 **As an alternative**, reDeleteIt is a Tampermonkey userscript that runs in your browser and deletes or edits Reddit content without using the API. It works best on old.reddit.com.
 
 Project: https://github.com/CryptoDragonLady/reDeleteIt
+=============================================
 
 ### Core Functionality
 - Delete posts and comments older than a specified number of days
