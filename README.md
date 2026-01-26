@@ -16,7 +16,8 @@ Due to recent changes in Reddit's API access policies, new app creation requires
 **As an alternative**, reDeleteIt is a Tampermonkey userscript that runs in your browser and deletes or edits Reddit content without using the API. It works best on old.reddit.com.
 
 Project: https://github.com/CryptoDragonLady/reDeleteIt
-=============================================
+
+======≠======================================
 
 ### Core Functionality
 - Delete posts and comments older than a specified number of days
